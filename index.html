@@ -70,13 +70,16 @@
             </div>
         </div>
 
+        <!-- FULL HOW TO PLAY SECTION -->
         <div class="mt-8 max-w-4xl mx-auto bg-zinc-900 border border-green-500/30 rounded-2xl p-6 text-sm">
             <h3 class="text-green-400 font-bold mb-3">HOW TO PLAY:</h3>
             <ul class="list-disc pl-5 space-y-1 text-green-300">
-                <li>Use Arrow Keys or WASD to move</li>
-                <li>Step on red tiles to answer questions</li>
-                <li>Reach the green star to complete the level</li>
-                <li>Timer starts at 45s and decreases by 1s per level</li>
+                <li>Use <strong>Arrow Keys or WASD</strong> to move the yellow player</li>
+                <li>Step on <strong style="color:#ef4444">RED TILES</strong> to trigger questions</li>
+                <li>Answer correctly to remove the red tile</li>
+                <li>Reach the <strong style="color:#86efac">GREEN STAR</strong> to complete the level</li>
+                <li>Timer starts at 45 seconds and decreases by 1s each level</li>
+                <li>Reach Level 10 to win the Grand Grok Prize!</li>
             </ul>
         </div>
     </div>
@@ -158,9 +161,10 @@
 
         function showUpdates() {
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
-• Added prominent "Show Updates" button<br>
-• Restored full How To Play section<br>
-• Improved Close Game button reliability`);
+• Added prominent Show Updates button<br>
+• Restored full How To Play guide<br>
+• Improved Close Game button<br>
+• 100+ questions loaded`);
         }
 
         function getQuestionForLevel() {
@@ -333,23 +337,20 @@
 
         function closeGame() {
             if (confirm("Close the game completely?")) {
-                // More reliable way to close
-                document.body.innerHTML = `
-                    <div style="text-align:center; margin-top:180px; color:#22c55e; font-family:'Press Start 2P';">
+                document.getElementById('gameContainer').innerHTML = `
+                    <div style="text-align:center; margin-top:150px; color:#22c55e; font-family:'Press Start 2P';">
                         <h1 style="font-size:48px;">GAME CLOSED</h1>
-                        <p style="margin-top:40px;">Thank you for playing Grok's Knowledge Labyrinth!</p>
+                        <p style="margin-top:30px;">Thank you for playing Grok's Knowledge Labyrinth!</p>
                     </div>`;
             }
         }
 
         function startAgain() {
-            if (confirm("Restart the game?")) {
-                location.reload();
-            }
+            if (confirm("Restart the game?")) location.reload();
         }
 
         function giveHint() {
-            addChat("Grok", "Red tiles trigger questions. Reach the green star!");
+            addChat("Grok", "Red tiles trigger questions. Reach the green star to win!");
         }
 
         document.addEventListener('keydown', e => {
