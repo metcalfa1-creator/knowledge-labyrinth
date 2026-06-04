@@ -54,7 +54,7 @@
                 <h2 class="text-green-400 text-xl mb-4">🧠 GENERAL KNOWLEDGE</h2>
                 <div id="chat" class="h-52 overflow-y-auto bg-black/70 p-4 rounded-2xl text-sm mb-6 space-y-3"></div>
                 
-                <!-- SHOW UPDATES BUTTON - Very Visible -->
+                <!-- SHOW UPDATES BUTTON -->
                 <button onclick="showUpdates()" 
                         class="w-full bg-purple-600 hover:bg-purple-700 border-4 border-purple-400 text-white font-bold py-5 rounded-3xl text-lg mb-4 shadow-xl">
                     📜 SHOW UPDATES
@@ -76,12 +76,16 @@
             </div>
         </div>
 
+        <!-- FULL HOW TO PLAY SECTION -->
         <div class="mt-8 max-w-4xl mx-auto bg-zinc-900 border border-green-500/30 rounded-2xl p-6 text-sm">
             <h3 class="text-green-400 font-bold mb-3">HOW TO PLAY:</h3>
             <ul class="list-disc pl-5 space-y-1 text-green-300">
-                <li>Use Arrow Keys or WASD to move</li>
-                <li>Step on red tiles to answer questions</li>
-                <li>Timer starts at 45s and decreases by 1s per level</li>
+                <li>Use <strong>Arrow Keys or WASD</strong> to move the yellow player</li>
+                <li>Step on <strong style="color:#ef4444">RED TILES</strong> to answer General Knowledge questions</li>
+                <li>Reach the <strong style="color:#86efac">GREEN STAR</strong> to complete the level</li>
+                <li>Timer starts at 45 seconds and decreases by 1s each level</li>
+                <li>Answer correctly to remove the red tile and gain points</li>
+                <li>Reach Level 10 to win the Grand Grok Prize!</li>
             </ul>
         </div>
     </div>
@@ -163,11 +167,10 @@
 
         function showUpdates() {
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
-• New prominent "Show Updates" button<br>
-• Improved button layout & visibility<br>
+• Added prominent "Show Updates" button<br>
+• Restored full How To Play section<br>
 • 100+ General Knowledge questions<br>
-• Stable movement and timer<br>
-• Enhanced Close Game button`);
+• Improved layout and visibility`);
         }
 
         function getQuestionForLevel() {
@@ -335,7 +338,7 @@
             gameStarted = true;
             generateMaze();
             draw();
-            addChat("Grok", "Welcome! Click the purple button to see latest updates.");
+            addChat("Grok", "Welcome! Use Arrow Keys or WASD to move.");
         }
 
         function closeGame() {
@@ -353,7 +356,7 @@
         }
 
         function giveHint() {
-            addChat("Grok", "Use Arrow Keys or WASD. Red tiles trigger questions.");
+            addChat("Grok", "Red tiles = questions. Green star = exit.");
         }
 
         document.addEventListener('keydown', e => {
