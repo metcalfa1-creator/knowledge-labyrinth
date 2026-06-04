@@ -16,20 +16,24 @@
             border: 8px solid #22c55e;
             box-shadow: 0 0 40px rgba(34, 197, 94, 0.6);
         }
+        .start-screen {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.97); display: flex;
+            align-items: center; justify-content: center; z-index: 100;
+        }
     </style>
 </head>
 <body class="text-white min-h-screen p-6">
 
     <!-- START SCREEN -->
-    <div id="startScreen" class="fixed inset-0 bg-black/95 flex items-center justify-center z-50">
+    <div id="startScreen" class="start-screen">
         <div class="text-center">
             <h1 class="text-6xl font-bold text-green-400 mb-4">GROK'S</h1>
-            <h1 class="text-5xl font-bold mb-8">KNOWLEDGE LABYRINTH</h1>
+            <h1 class="text-5xl font-bold text-white mb-8">KNOWLEDGE LABYRINTH</h1>
             <button onclick="startGame()" 
-                    class="bg-green-600 hover:bg-green-500 text-black font-bold text-3xl px-20 py-8 rounded-3xl border-4 border-green-400">
+                    class="bg-green-600 hover:bg-green-500 text-black font-bold text-2xl px-16 py-6 rounded-3xl border-4 border-green-400">
                 START GAME
             </button>
-            <p class="mt-10 text-green-300">Arrow Keys or WASD to move</p>
         </div>
     </div>
 
@@ -50,6 +54,11 @@
                 <h2 class="text-green-400 text-xl mb-4">GENERAL KNOWLEDGE</h2>
                 <div id="chat" class="h-52 overflow-y-auto bg-black/70 p-4 rounded-2xl text-sm mb-5 space-y-3"></div>
                 
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="toggleSpeech()" id="speechBtn" class="bg-blue-600 hover:bg-blue-700 py-3 rounded-2xl font-bold text-sm">🔊 Speech: ON</button>
+                    <button onclick="giveHint()" class="bg-gradient-to-r from-green-500 to-emerald-600 py-3 rounded-2xl font-bold text-sm">💡 HINT</button>
+                </div>
+
                 <div class="grid grid-cols-2 gap-3 mt-4">
                     <button onclick="closeGame()" class="bg-red-600 hover:bg-red-700 py-3 rounded-2xl font-bold text-sm">CLOSE GAME</button>
                     <button onclick="startAgain()" class="bg-yellow-600 hover:bg-yellow-700 py-3 rounded-2xl font-bold text-sm">RESTART</button>
@@ -66,12 +75,14 @@
             <ul class="list-disc pl-5 space-y-1 text-green-300">
                 <li><strong>Arrow Keys or WASD</strong> to move</li>
                 <li>Step on <strong style="color:#ef4444">RED TILES</strong> to answer questions</li>
-                <li>Timer starts at 45s and decreases each level</li>
+                <li>Timer starts at 45s and decreases by 1s per level</li>
+                <li>More red blocks each level</li>
             </ul>
         </div>
     </div>
 
     <script>
+        let gameStarted = false;
         const canvas = document.getElementById('game');
         const ctx = canvas.getContext('2d');
         const tileSize = 27;
@@ -80,7 +91,42 @@
         let puzzleTiles = [];
         let timerInterval = null;
         let timeLeft = 45;
-        let gameActive = false;
+        let speechEnabled = true;
+
+        const speech = window.speechSynthesis;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                switch(type) {
+                    case 'correct': osc.frequency.setValueAtTime(600, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(1400, audioCtx.currentTime + 0.4); gain.gain.value = 0.3; break;
+                    case 'wrong': osc.frequency.setValueAtTime(300, audioCtx.currentTime); gain.gain.value = 0.4; osc.type = 'sawtooth'; break;
+                    case 'timer': osc.frequency.setValueAtTime(1100, audioCtx.currentTime); gain.gain.value = 0.2; break;
+                    case 'prize': osc.frequency.setValueAtTime(500, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(1600, audioCtx.currentTime + 0.8); gain.gain.value = 0.35; break;
+                    case 'tile': osc.frequency.setValueAtTime(700, audioCtx.currentTime); gain.gain.value = 0.15; break;
+                }
+                osc.start();
+                setTimeout(() => { gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1); osc.stop(audioCtx.currentTime + 0.5); }, 400);
+            } catch(e) {}
+        }
+
+        function speak(text) {
+            if (!speechEnabled || !speech) return;
+            speech.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.92;
+            speech.speak(utterance);
+        }
+
+        function toggleSpeech() {
+            speechEnabled = !speechEnabled;
+            document.getElementById('speechBtn').textContent = speechEnabled ? "🔊 Speech: ON" : "🔇 Speech: OFF";
+        }
 
         const allQuestions = [
             {q:"How many continents are there?", a:"7"},
@@ -92,8 +138,32 @@
             {q:"Planets in solar system?", a:"8"},
             {q:"Chemical symbol for gold?", a:"Au"},
             {q:"Gas plants absorb?", a:"Carbon Dioxide"},
-            {q:"First US President?", a:"George Washington"}
+            {q:"First US President?", a:"George Washington"},
+            {q:"Capital of Japan?", a:"Tokyo"},
+            {q:"Longest river?", a:"Nile"},
+            {q:"Smallest country?", a:"Vatican City"},
+            {q:"Author of Romeo and Juliet?", a:"William Shakespeare"},
+            {q:"Boiling point of water (°C)?", a:"100"},
+            {q:"Force pulling to Earth?", a:"Gravity"},
+            {q:"Hardest natural substance?", a:"Diamond"},
+            {q:"Capital of Australia?", a:"Canberra"},
+            {q:"Red Planet?", a:"Mars"},
+            {q:"Inventor of light bulb?", a:"Thomas Edison"}
         ];
+
+        function getQuestionForLevel() {
+            return allQuestions[Math.floor(Math.random() * allQuestions.length)];
+        }
+
+        function getRedBlocksForLevel() {
+            return 12 + Math.floor(level * 3.2);
+        }
+
+        function awardPrize() {
+            const prizes = ["🌟 Grok Novice Explorer","🔥 Grok Knowledge Seeker","🧠 Grok Wisdom Guardian","⭐ Grok Master Navigator","🏆 Grok Elite Scholar","💎 Grok Legendary Mind","🌌 Grok Cosmic Thinker","⚡ Grok Ultimate Champion","👑 Grok Grand Sage","🏅 GROK MASTER OF KNOWLEDGE"];
+            alert(`🎉 LEVEL ${level} COMPLETE!\n\n${prizes[level-1]}\n\n+300 Bonus Points!`);
+            playSound('prize');
+        }
 
         function startTimer() {
             clearInterval(timerInterval);
@@ -137,7 +207,7 @@
             maze[exit.y][exit.x] = 0;
             player = { x: 1, y: 1 };
 
-            const numBlocks = 12 + Math.floor(level * 3.2);
+            const numBlocks = getRedBlocksForLevel();
             for (let i = 0; i < numBlocks; i++) {
                 let px = Math.floor(Math.random() * (cols - 8)) + 4;
                 let py = Math.floor(Math.random() * (rows - 8)) + 4;
@@ -180,8 +250,11 @@
         }
 
         function triggerPuzzle() {
+            clearInterval(timerInterval);
             const q = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+            
             startTimer();
+            playSound('tile');
 
             const answer = prompt(`LEVEL ${level} | ${q.q}\n\nYour Answer (${timeLeft}s):`);
 
@@ -191,8 +264,7 @@
             if (!answer || answer.trim().length < 2) {
                 score = Math.max(0, score - 10);
                 alert("Wrong try again");
-                document.getElementById('score').textContent = score;
-                setTimeout(triggerPuzzle, 500);
+                setTimeout(triggerPuzzle, 600);
                 return;
             }
 
@@ -203,7 +275,7 @@
             } else {
                 score = Math.max(0, score - 10);
                 alert("Wrong try again");
-                setTimeout(triggerPuzzle, 500);
+                setTimeout(triggerPuzzle, 600);
             }
             document.getElementById('score').textContent = score;
             draw();
@@ -241,6 +313,7 @@
         function startGame() {
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('gameContainer').classList.remove('hidden');
+            gameStarted = true;
             generateMaze();
             draw();
         }
@@ -257,10 +330,8 @@
             alert("Use Arrow Keys or WASD to move!");
         }
 
-        // KEY LISTENER - Always active
         document.addEventListener('keydown', e => {
-            if (document.getElementById('gameContainer').classList.contains('hidden')) return;
-
+            if (!gameStarted) return;
             if (['ArrowUp','w','W'].includes(e.key)) move(0, -1);
             if (['ArrowDown','s','S'].includes(e.key)) move(0, 1);
             if (['ArrowLeft','a','A'].includes(e.key)) move(-1, 0);
@@ -268,7 +339,6 @@
         });
 
         // Initialize
-        console.log("Game loaded - click START GAME");
     </script>
 </body>
 </html>
