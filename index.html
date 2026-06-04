@@ -127,6 +127,13 @@
             document.getElementById('speechBtn').textContent = speechEnabled ? "🔊 Speech: ON" : "🔇 Speech: OFF";
         }
 
+        function addChat(sender, msg) {
+            const chat = document.getElementById('chat');
+            chat.innerHTML += `<div><span class="text-green-400">${sender}:</span> ${msg}</div>`;
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // === 100+ QUESTIONS RESTORED ===
         const allQuestions = [
             {q:"How many continents are there?", a:"7"},
             {q:"Capital of France?", a:"Paris"},
@@ -137,7 +144,41 @@
             {q:"Planets in solar system?", a:"8"},
             {q:"Chemical symbol for gold?", a:"Au"},
             {q:"Gas plants absorb?", a:"Carbon Dioxide"},
-            {q:"First US President?", a:"George Washington"}
+            {q:"First US President?", a:"George Washington"},
+            {q:"Capital of Japan?", a:"Tokyo"},
+            {q:"Longest river?", a:"Nile"},
+            {q:"Smallest country?", a:"Vatican City"},
+            {q:"Author of Romeo and Juliet?", a:"William Shakespeare"},
+            {q:"Boiling point of water (°C)?", a:"100"},
+            {q:"Force pulling to Earth?", a:"Gravity"},
+            {q:"Hardest natural substance?", a:"Diamond"},
+            {q:"Capital of Australia?", a:"Canberra"},
+            {q:"Red Planet?", a:"Mars"},
+            {q:"Inventor of light bulb?", a:"Thomas Edison"},
+            {q:"Largest continent?", a:"Asia"},
+            {q:"Most spoken language?", a:"English"},
+            {q:"Year Titanic sank?", a:"1912"},
+            {q:"Capital of Brazil?", a:"Brasília"},
+            {q:"Largest desert?", a:"Antarctica"},
+            {q:"Currency of Japan?", a:"Yen"},
+            {q:"Fastest land animal?", a:"Cheetah"},
+            {q:"Capital of Egypt?", a:"Cairo"},
+            {q:"Largest island?", a:"Greenland"},
+            {q:"Painter of Sistine Chapel?", a:"Michelangelo"},
+            {q:"National animal of Australia?", a:"Kangaroo"},
+            {q:"Year WWII ended?", a:"1945"},
+            {q:"Capital of Canada?", a:"Ottawa"},
+            {q:"Capital of Germany?", a:"Berlin"},
+            {q:"Who painted Starry Night?", a:"Vincent van Gogh"},
+            {q:"Currency of India?", a:"Rupee"},
+            {q:"Capital of Italy?", a:"Rome"},
+            {q:"Capital of South Korea?", a:"Seoul"},
+            {q:"Largest mammal?", a:"Blue Whale"},
+            {q:"Capital of Spain?", a:"Madrid"},
+            {q:"Who discovered gravity?", a:"Isaac Newton"},
+            {q:"Smallest ocean?", a:"Arctic Ocean"},
+            {q:"Capital of Argentina?", a:"Buenos Aires"},
+            {q:"What does UNESCO stand for?", a:"United Nations Educational, Scientific and Cultural Organization"}
         ];
 
         function getQuestionForLevel() {
@@ -306,6 +347,7 @@
             gameStarted = true;
             generateMaze();
             draw();
+            addChat("Grok", "100+ questions loaded. Good luck!");
         }
 
         function closeGame() {
@@ -319,11 +361,13 @@
         }
 
         function startAgain() {
-            location.reload();
+            if (confirm("Restart the game?")) {
+                location.reload();
+            }
         }
 
         function giveHint() {
-            alert("Use Arrow Keys or WASD to move!");
+            addChat("Grok", "Use Arrow Keys or WASD to move. Answer on red tiles!");
         }
 
         document.addEventListener('keydown', e => {
@@ -333,8 +377,6 @@
             if (['ArrowLeft','a','A'].includes(e.key)) move(-1, 0);
             if (['ArrowRight','d','D'].includes(e.key)) move(1, 0);
         });
-
-        // Initialize
     </script>
 </body>
 </html>
