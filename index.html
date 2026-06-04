@@ -52,21 +52,22 @@
 
             <div class="w-96 bg-zinc-900/95 border border-green-500/50 rounded-3xl p-6">
                 <h2 class="text-green-400 text-xl mb-4">🧠 GENERAL KNOWLEDGE</h2>
-                <div id="chat" class="h-52 overflow-y-auto bg-black/70 p-4 rounded-2xl text-sm mb-5 space-y-3"></div>
+                <div id="chat" class="h-52 overflow-y-auto bg-black/70 p-4 rounded-2xl text-sm mb-6 space-y-3"></div>
                 
-                <!-- Buttons -->
-                <div class="grid grid-cols-2 gap-3 mt-4">
+                <!-- Prominent Updates Button -->
+                <button onclick="showUpdates()" 
+                        class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-2xl text-base mb-4 border-2 border-purple-400">
+                    📜 SHOW UPDATES
+                </button>
+
+                <div class="grid grid-cols-2 gap-3">
                     <button onclick="toggleSpeech()" id="speechBtn" class="bg-blue-600 hover:bg-blue-700 py-3 rounded-2xl font-bold text-sm">🔊 Speech: ON</button>
                     <button onclick="giveHint()" class="bg-gradient-to-r from-green-500 to-emerald-600 py-3 rounded-2xl font-bold text-sm">💡 HINT</button>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 mt-3">
-                    <button onclick="showUpdates()" class="bg-purple-600 hover:bg-purple-700 py-3 rounded-2xl font-bold text-sm">📜 SHOW UPDATES</button>
                     <button onclick="closeGame()" class="bg-red-600 hover:bg-red-700 py-3 rounded-2xl font-bold text-sm">CLOSE GAME</button>
-                </div>
-
-                <div class="mt-4">
-                    <button onclick="startAgain()" class="w-full bg-yellow-600 hover:bg-yellow-700 py-3 rounded-2xl font-bold text-sm">RESTART GAME</button>
+                    <button onclick="startAgain()" class="bg-yellow-600 hover:bg-yellow-700 py-3 rounded-2xl font-bold text-sm">RESTART</button>
                 </div>
 
                 <div class="mt-8 text-center">
@@ -162,11 +163,11 @@
 
         function showUpdates() {
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
-• Added "Show Updates" button<br>
-• Improved button layout<br>
-• Fixed visibility issues<br>
+• Added prominent "Show Updates" button<br>
+• Improved button layout & visibility<br>
 • 100+ General Knowledge questions<br>
-• Stable movement and timer`);
+• Stable movement and timer<br>
+• Enhanced Close Game functionality`);
         }
 
         function getQuestionForLevel() {
@@ -307,9 +308,7 @@
             player.y = ny;
             draw();
 
-            if (puzzleTiles.some(t => t.x === player.x && t.y === player.y)) {
-                triggerPuzzle();
-            }
+            if (puzzleTiles.some(t => t.x === player.x && t.y === player.y)) triggerPuzzle();
 
             if (player.x === exit.x && player.y === exit.y) {
                 awardPrize();
@@ -334,7 +333,7 @@
             gameStarted = true;
             generateMaze();
             draw();
-            addChat("Grok", "Game loaded successfully!");
+            addChat("Grok", "Game loaded! Click the purple button to see updates.");
         }
 
         function closeGame() {
