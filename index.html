@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <!-- GAME SCREEN -->
+    <!-- GAME CONTAINER -->
     <div id="gameContainer" class="max-w-7xl mx-auto hidden">
         <div class="flex gap-8 justify-center">
             <div class="relative">
@@ -70,14 +70,12 @@
             </div>
         </div>
 
-        <!-- Instructions -->
         <div class="mt-8 max-w-4xl mx-auto bg-zinc-900 border border-green-500/30 rounded-2xl p-6 text-sm">
             <h3 class="text-green-400 font-bold mb-3">HOW TO PLAY:</h3>
             <ul class="list-disc pl-5 space-y-1 text-green-300">
-                <li><strong>Arrow Keys or WASD</strong> to move</li>
-                <li>Step on <strong style="color:#ef4444">RED TILES</strong> to answer questions</li>
+                <li>Use Arrow Keys or WASD to move</li>
+                <li>Step on red tiles to answer questions</li>
                 <li>Timer starts at 45s and decreases by 1s per level</li>
-                <li>Reach Level 10 for the Grand Grok Prize!</li>
             </ul>
         </div>
     </div>
@@ -246,7 +244,6 @@
             const q = allQuestions[Math.floor(Math.random() * allQuestions.length)];
             
             startTimer();
-            playSound('tile');
 
             const answer = prompt(`LEVEL ${level} | ${q.q}\n\nYour Answer (${timeLeft}s):`);
 
@@ -262,13 +259,11 @@
 
             if (answer.toLowerCase().trim() === q.a.toLowerCase()) {
                 alert("Correct");
-                playSound('correct');
                 score += 80;
                 puzzleTiles = puzzleTiles.filter(t => !(t.x === player.x && t.y === player.y));
             } else {
                 score = Math.max(0, score - 10);
                 alert("Wrong try again");
-                playSound('wrong');
                 setTimeout(triggerPuzzle, 600);
             }
             document.getElementById('score').textContent = score;
@@ -314,7 +309,13 @@
         }
 
         function closeGame() {
-            if (confirm("Close the game?")) window.close();
+            if (confirm("Close the game completely?")) {
+                document.getElementById('gameContainer').innerHTML = `
+                    <div style="text-align:center; margin-top:150px; color:#22c55e; font-family:'Press Start 2P';">
+                        <h1 style="font-size:48px;">GAME CLOSED</h1>
+                        <p style="margin-top:30px;">Thank you for playing!</p>
+                    </div>`;
+            }
         }
 
         function startAgain() {
