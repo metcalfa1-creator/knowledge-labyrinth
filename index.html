@@ -30,7 +30,6 @@
         <div class="text-center">
             <h1 class="text-6xl font-bold text-green-400 mb-4">GROK'S</h1>
             <h1 class="text-5xl font-bold text-white mb-8">KNOWLEDGE LABYRINTH</h1>
-            <p class="text-green-300 text-xl mb-10">10 Levels • Prim's Algorithm • 100+ Questions</p>
             <button onclick="startGame()" 
                     class="bg-green-600 hover:bg-green-500 text-black font-bold text-2xl px-16 py-6 rounded-3xl border-4 border-green-400">
                 START GAME
@@ -55,12 +54,13 @@
                 <h2 class="text-green-400 text-xl mb-4">🧠 GENERAL KNOWLEDGE</h2>
                 <div id="chat" class="h-52 overflow-y-auto bg-black/70 p-4 rounded-2xl text-sm mb-5 space-y-3"></div>
                 
-                <div class="grid grid-cols-2 gap-3">
+                <!-- Buttons -->
+                <div class="grid grid-cols-2 gap-3 mt-4">
                     <button onclick="toggleSpeech()" id="speechBtn" class="bg-blue-600 hover:bg-blue-700 py-3 rounded-2xl font-bold text-sm">🔊 Speech: ON</button>
                     <button onclick="giveHint()" class="bg-gradient-to-r from-green-500 to-emerald-600 py-3 rounded-2xl font-bold text-sm">💡 HINT</button>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3 mt-4">
+                <div class="grid grid-cols-2 gap-3 mt-3">
                     <button onclick="showUpdates()" class="bg-purple-600 hover:bg-purple-700 py-3 rounded-2xl font-bold text-sm">📜 SHOW UPDATES</button>
                     <button onclick="closeGame()" class="bg-red-600 hover:bg-red-700 py-3 rounded-2xl font-bold text-sm">CLOSE GAME</button>
                 </div>
@@ -137,7 +137,6 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        // 100+ Questions
         const allQuestions = [
             {q:"How many continents are there?", a:"7"},
             {q:"Capital of France?", a:"Paris"},
@@ -158,27 +157,16 @@
             {q:"Hardest natural substance?", a:"Diamond"},
             {q:"Capital of Australia?", a:"Canberra"},
             {q:"Red Planet?", a:"Mars"},
-            {q:"Inventor of light bulb?", a:"Thomas Edison"},
-            {q:"Largest continent?", a:"Asia"},
-            {q:"Most spoken language?", a:"English"},
-            {q:"Year Titanic sank?", a:"1912"},
-            {q:"Capital of Brazil?", a:"Brasília"},
-            {q:"Largest desert?", a:"Antarctica"},
-            {q:"Currency of Japan?", a:"Yen"},
-            {q:"Fastest land animal?", a:"Cheetah"},
-            {q:"Capital of Egypt?", a:"Cairo"},
-            {q:"Largest island?", a:"Greenland"},
-            {q:"Painter of Sistine Chapel?", a:"Michelangelo"}
+            {q:"Inventor of light bulb?", a:"Thomas Edison"}
         ];
 
         function showUpdates() {
-            addChat("Grok", `📜 Latest Updates:<br>
+            addChat("Grok", `📜 <strong>Latest Updates</strong><br>
 • Added "Show Updates" button<br>
-• Improved Close Game button<br>
-• Restored 100+ questions<br>
-• Fixed movement & UI stability<br>
-• Enhanced Prim's maze generation<br>
-• Better chat system`);
+• Improved button layout<br>
+• Fixed visibility issues<br>
+• 100+ General Knowledge questions<br>
+• Stable movement and timer`);
         }
 
         function getQuestionForLevel() {
@@ -283,7 +271,6 @@
         function triggerPuzzle() {
             clearInterval(timerInterval);
             const q = allQuestions[Math.floor(Math.random() * allQuestions.length)];
-            
             startTimer();
 
             const answer = prompt(`LEVEL ${level} | ${q.q}\n\nYour Answer (${timeLeft}s):`);
@@ -347,7 +334,7 @@
             gameStarted = true;
             generateMaze();
             draw();
-            addChat("Grok", "Welcome! Click 'SHOW UPDATES' to see latest changes.");
+            addChat("Grok", "Game loaded successfully!");
         }
 
         function closeGame() {
@@ -361,9 +348,7 @@
         }
 
         function startAgain() {
-            if (confirm("Restart the game?")) {
-                location.reload();
-            }
+            if (confirm("Restart the game?")) location.reload();
         }
 
         function giveHint() {
