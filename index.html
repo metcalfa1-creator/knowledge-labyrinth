@@ -93,6 +93,7 @@
         let timeLeft = 45;
         let speechEnabled = true;
         let availableQuestions = [];
+        let wrongAnswersThisLevel = [];   // New: Track wrong answers
 
         const speech = window.speechSynthesis;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -179,7 +180,17 @@
             {q:"Who discovered gravity?", a:"Isaac Newton"},
             {q:"Smallest ocean?", a:"Arctic Ocean"},
             {q:"Capital of Argentina?", a:"Buenos Aires"},
-            {q:"What does UNESCO stand for?", a:"United Nations Educational, Scientific and Cultural Organization"}
+            {q:"What does UNESCO stand for?", a:"United Nations Educational, Scientific and Cultural Organization"},
+            {q:"How many sides does a triangle have?", a:"3"},
+            {q:"Capital of Russia?", a:"Moscow"},
+            {q:"Largest country by area?", a:"Russia"},
+            {q:"Currency of the UK?", a:"Pound"},
+            {q:"Who wrote Harry Potter?", a:"J.K. Rowling"},
+            {q:"Capital of China?", a:"Beijing"},
+            {q:"How many hearts does an octopus have?", a:"3"},
+            {q:"Fastest bird?", a:"Peregrine Falcon"},
+            {q:"Chemical symbol for water?", a:"H2O"},
+            {q:"How many bones in adult human body?", a:"206"}
         ];
 
         function shuffle(array) {
@@ -195,16 +206,29 @@
 
         function showUpdates() {
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
-• 150+ unique questions with strong anti-repetition<br>
-• Guaranteed red tiles every level<br>
-• Fixed Close Game button`);
+• 150+ unique questions with anti-repetition<br>
+• At end of each level: shows all wrong answers with correct ones<br>
+• Guaranteed red tiles every level`);
         }
 
         function getRedBlocksForLevel() {
-            return Math.max(8, 12 + Math.floor(level * 3.5)); // Guaranteed minimum
+            return Math.max(8, 12 + Math.floor(level * 3.5));
         }
 
         function awardPrize() {
+            // Show wrong answers from this level
+            if (wrongAnswersThisLevel.length > 0) {
+                let msg = "❌ Questions you got wrong this level:\n\n";
+                wrongAnswersThisLevel.forEach(item => {
+                    msg += `Q: ${item.q}\nA: ${item.a}\n\n`;
+                });
+                alert(msg);
+            } else {
+                alert("Perfect level! No wrong answers.");
+            }
+
+            wrongAnswersThisLevel = []; // Reset for next level
+
             const prizes = ["🌟 Grok Novice Explorer","🔥 Grok Knowledge Seeker","🧠 Grok Wisdom Guardian","⭐ Grok Master Navigator","🏆 Grok Elite Scholar","💎 Grok Legendary Mind","🌌 Grok Cosmic Thinker","⚡ Grok Ultimate Champion","👑 Grok Grand Sage","🏅 GROK MASTER OF KNOWLEDGE"];
             const prize = prizes[level-1] || "🏅 Grok Legend";
             alert(`🎉 LEVEL ${level} COMPLETE!\n\n${prize}\n\n+300 Bonus Points!`);
@@ -253,13 +277,12 @@
             maze[exit.y][exit.x] = 0;
             player = { x: 1, y: 1 };
 
-            // Guaranteed red blocks
             const numBlocks = getRedBlocksForLevel();
             let attempts = 0;
-            while (puzzleTiles.length < numBlocks && attempts < 200) {
+            while (puzzleTiles.length < numBlocks && attempts < 300) {
                 attempts++;
-                let px = Math.floor(Math.random() * (cols - 6)) + 3;
-                let py = Math.floor(Math.random() * (rows - 6)) + 3;
+                let px = Math.floor(Math.random() * (cols - 8)) + 4;
+                let py = Math.floor(Math.random() * (rows - 8)) + 4;
                 if (maze[py][px] === 0 && !puzzleTiles.some(t => t.x === px && t.y === py) && 
                     !(px === player.x && py === player.y) && !(px === exit.x && py === exit.y)) {
                     puzzleTiles.push({x: px, y: py});
@@ -312,6 +335,7 @@
             if (!answer || answer.trim().length < 2) {
                 score = Math.max(0, score - 10);
                 alert("Wrong try again");
+                wrongAnswersThisLevel.push({q: q.q, a: q.a}); // Track wrong answer
                 setTimeout(triggerPuzzle, 600);
                 return;
             }
@@ -323,6 +347,7 @@
             } else {
                 score = Math.max(0, score - 10);
                 alert("Wrong try again");
+                wrongAnswersThisLevel.push({q: q.q, a: q.a}); // Track wrong answer
                 setTimeout(triggerPuzzle, 600);
             }
             document.getElementById('score').textContent = score;
@@ -364,9 +389,10 @@
             document.getElementById('gameContainer').classList.remove('hidden');
             gameStarted = true;
             availableQuestions = shuffle([...baseQuestions]);
+            wrongAnswersThisLevel = []; // Reset for new game
             generateMaze();
             draw();
-            addChat("Grok", "200+ questions loaded with smart anti-repetition!");
+            addChat("Grok", "200+ unique questions loaded. Good luck!");
         }
 
         function closeGame() {
@@ -385,6 +411,10 @@
 
         function giveHint() {
             addChat("Grok", "Red tiles trigger questions. Reach the green star!");
+        }
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
         }
 
         document.addEventListener('keydown', e => {
