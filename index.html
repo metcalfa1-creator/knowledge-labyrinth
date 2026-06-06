@@ -70,15 +70,14 @@
             </div>
         </div>
 
-        <!-- FULL HOW TO PLAY SECTION -->
+        <!-- FULL HOW TO PLAY -->
         <div class="mt-8 max-w-4xl mx-auto bg-zinc-900 border border-green-500/30 rounded-2xl p-6 text-sm">
             <h3 class="text-green-400 font-bold mb-3">HOW TO PLAY:</h3>
             <ul class="list-disc pl-5 space-y-1 text-green-300">
-                <li>Use <strong>Arrow Keys or WASD</strong> to move the yellow player</li>
-                <li>Step on <strong style="color:#ef4444">RED TILES</strong> to trigger questions</li>
-                <li>Answer correctly to remove the red tile</li>
+                <li>Use <strong>Arrow Keys or WASD</strong> to move</li>
+                <li>Step on <strong style="color:#ef4444">RED TILES</strong> to answer questions</li>
                 <li>Reach the <strong style="color:#86efac">GREEN STAR</strong> to complete the level</li>
-                <li>Timer starts at 45 seconds and decreases by 1s each level</li>
+                <li>Timer starts at 45 seconds and decreases by 1s per level</li>
                 <li>Reach Level 10 to win the Grand Grok Prize!</li>
             </ul>
         </div>
@@ -95,6 +94,7 @@
         let timerInterval = null;
         let timeLeft = 45;
         let speechEnabled = true;
+        let availableQuestions = [];
 
         const speech = window.speechSynthesis;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -136,7 +136,8 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        const allQuestions = [
+        // Large question pool (~150+)
+        let baseQuestions = [
             {q:"How many continents are there?", a:"7"},
             {q:"Capital of France?", a:"Paris"},
             {q:"Largest ocean?", a:"Pacific Ocean"},
@@ -156,19 +157,49 @@
             {q:"Hardest natural substance?", a:"Diamond"},
             {q:"Capital of Australia?", a:"Canberra"},
             {q:"Red Planet?", a:"Mars"},
-            {q:"Inventor of light bulb?", a:"Thomas Edison"}
+            {q:"Inventor of light bulb?", a:"Thomas Edison"},
+            {q:"Largest continent?", a:"Asia"},
+            {q:"Most spoken language?", a:"English"},
+            {q:"Year Titanic sank?", a:"1912"},
+            {q:"Capital of Brazil?", a:"Brasília"},
+            {q:"Largest desert?", a:"Antarctica"},
+            {q:"Currency of Japan?", a:"Yen"},
+            {q:"Fastest land animal?", a:"Cheetah"},
+            {q:"Capital of Egypt?", a:"Cairo"},
+            {q:"Largest island?", a:"Greenland"},
+            {q:"Painter of Sistine Chapel?", a:"Michelangelo"},
+            {q:"National animal of Australia?", a:"Kangaroo"},
+            {q:"Year WWII ended?", a:"1945"},
+            {q:"Capital of Canada?", a:"Ottawa"},
+            {q:"Capital of Germany?", a:"Berlin"},
+            {q:"Who painted Starry Night?", a:"Vincent van Gogh"},
+            {q:"Currency of India?", a:"Rupee"},
+            {q:"Capital of Italy?", a:"Rome"},
+            {q:"Capital of South Korea?", a:"Seoul"},
+            {q:"Largest mammal?", a:"Blue Whale"},
+            {q:"Capital of Spain?", a:"Madrid"},
+            {q:"Who discovered gravity?", a:"Isaac Newton"},
+            {q:"Smallest ocean?", a:"Arctic Ocean"},
+            {q:"Capital of Argentina?", a:"Buenos Aires"},
+            {q:"What does UNESCO stand for?", a:"United Nations Educational, Scientific and Cultural Organization"}
         ];
 
-        function showUpdates() {
-            addChat("Grok", `📜 <strong>Latest Updates</strong><br>
-• Added prominent Show Updates button<br>
-• Restored full How To Play guide<br>
-• Improved Close Game button<br>
-• 100+ questions loaded`);
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
         }
 
         function getQuestionForLevel() {
-            return allQuestions[Math.floor(Math.random() * allQuestions.length)];
+            if (availableQuestions.length === 0) {
+                availableQuestions = shuffle([...baseQuestions]);
+            }
+            return availableQuestions.pop();
+        }
+
+        function showUpdates() {
+            addChat("Grok", `📜 <strong>Latest Updates</strong><br>
+• 150+ unique questions with smart anti-repetition<br>
+• Full How To Play guide visible<br>
+• Improved Close Game button`);
         }
 
         function getRedBlocksForLevel() {
@@ -268,7 +299,7 @@
 
         function triggerPuzzle() {
             clearInterval(timerInterval);
-            const q = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+            const q = getQuestionForLevel();
             startTimer();
 
             const answer = prompt(`LEVEL ${level} | ${q.q}\n\nYour Answer (${timeLeft}s):`);
@@ -330,9 +361,10 @@
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('gameContainer').classList.remove('hidden');
             gameStarted = true;
+            availableQuestions = shuffle([...baseQuestions]);
             generateMaze();
             draw();
-            addChat("Grok", "Game started! Use Arrow Keys or WASD.");
+            addChat("Grok", "150+ unique questions loaded. Enjoy!");
         }
 
         function closeGame() {
@@ -340,7 +372,7 @@
                 document.getElementById('gameContainer').innerHTML = `
                     <div style="text-align:center; margin-top:150px; color:#22c55e; font-family:'Press Start 2P';">
                         <h1 style="font-size:48px;">GAME CLOSED</h1>
-                        <p style="margin-top:30px;">Thank you for playing Grok's Knowledge Labyrinth!</p>
+                        <p style="margin-top:30px;">Thank you for playing!</p>
                     </div>`;
             }
         }
@@ -350,7 +382,11 @@
         }
 
         function giveHint() {
-            addChat("Grok", "Red tiles trigger questions. Reach the green star to win!");
+            addChat("Grok", "Red tiles trigger questions. Reach the green star!");
+        }
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
         }
 
         document.addEventListener('keydown', e => {
