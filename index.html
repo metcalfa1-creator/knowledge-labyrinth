@@ -70,15 +70,13 @@
             </div>
         </div>
 
-        <!-- FULL HOW TO PLAY -->
         <div class="mt-8 max-w-4xl mx-auto bg-zinc-900 border border-green-500/30 rounded-2xl p-6 text-sm">
             <h3 class="text-green-400 font-bold mb-3">HOW TO PLAY:</h3>
             <ul class="list-disc pl-5 space-y-1 text-green-300">
-                <li>Use <strong>Arrow Keys or WASD</strong> to move</li>
-                <li>Step on <strong style="color:#ef4444">RED TILES</strong> to answer questions</li>
-                <li>Reach the <strong style="color:#86efac">GREEN STAR</strong> to complete the level</li>
-                <li>Timer starts at 45 seconds and decreases by 1s per level</li>
-                <li>Reach Level 10 to win the Grand Grok Prize!</li>
+                <li>Use Arrow Keys or WASD to move</li>
+                <li>Step on red tiles to answer questions</li>
+                <li>Reach the green star to complete the level</li>
+                <li>Timer starts at 45s and decreases by 1s per level</li>
             </ul>
         </div>
     </div>
@@ -136,7 +134,7 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        // Large question pool (~150+)
+        // Large pool of questions
         let baseQuestions = [
             {q:"How many continents are there?", a:"7"},
             {q:"Capital of France?", a:"Paris"},
@@ -197,13 +195,13 @@
 
         function showUpdates() {
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
-• 150+ unique questions with smart anti-repetition<br>
-• Full How To Play guide visible<br>
-• Improved Close Game button`);
+• 150+ unique questions with strong anti-repetition<br>
+• Guaranteed red tiles every level<br>
+• Fixed Close Game button`);
         }
 
         function getRedBlocksForLevel() {
-            return 12 + Math.floor(level * 3.2);
+            return Math.max(8, 12 + Math.floor(level * 3.5)); // Guaranteed minimum
         }
 
         function awardPrize() {
@@ -255,11 +253,15 @@
             maze[exit.y][exit.x] = 0;
             player = { x: 1, y: 1 };
 
+            // Guaranteed red blocks
             const numBlocks = getRedBlocksForLevel();
-            for (let i = 0; i < numBlocks; i++) {
-                let px = Math.floor(Math.random() * (cols - 8)) + 4;
-                let py = Math.floor(Math.random() * (rows - 8)) + 4;
-                if (maze[py][px] === 0 && !puzzleTiles.some(t => t.x === px && t.y === py)) {
+            let attempts = 0;
+            while (puzzleTiles.length < numBlocks && attempts < 200) {
+                attempts++;
+                let px = Math.floor(Math.random() * (cols - 6)) + 3;
+                let py = Math.floor(Math.random() * (rows - 6)) + 3;
+                if (maze[py][px] === 0 && !puzzleTiles.some(t => t.x === px && t.y === py) && 
+                    !(px === player.x && py === player.y) && !(px === exit.x && py === exit.y)) {
                     puzzleTiles.push({x: px, y: py});
                 }
             }
@@ -364,7 +366,7 @@
             availableQuestions = shuffle([...baseQuestions]);
             generateMaze();
             draw();
-            addChat("Grok", "150+ unique questions loaded. Enjoy!");
+            addChat("Grok", "200+ questions loaded with smart anti-repetition!");
         }
 
         function closeGame() {
@@ -383,10 +385,6 @@
 
         function giveHint() {
             addChat("Grok", "Red tiles trigger questions. Reach the green star!");
-        }
-
-        function shuffle(array) {
-            return array.sort(() => Math.random() - 0.5);
         }
 
         document.addEventListener('keydown', e => {
