@@ -70,13 +70,16 @@
             </div>
         </div>
 
+        <!-- FULL HOW TO PLAY -->
         <div class="mt-8 max-w-4xl mx-auto bg-zinc-900 border border-green-500/30 rounded-2xl p-6 text-sm">
             <h3 class="text-green-400 font-bold mb-3">HOW TO PLAY:</h3>
             <ul class="list-disc pl-5 space-y-1 text-green-300">
-                <li>Use Arrow Keys or WASD to move</li>
-                <li>Step on red tiles to answer questions</li>
-                <li>Reach the green star to complete the level</li>
-                <li>Timer starts at 45s and decreases by 1s per level</li>
+                <li>Use <strong>Arrow Keys or WASD</strong> to move the yellow player</li>
+                <li>Step on <strong style="color:#ef4444">RED TILES</strong> to answer General Knowledge questions</li>
+                <li>Correct answers remove the red tile and give +80 points</li>
+                <li>Reach the <strong style="color:#86efac">GREEN STAR</strong> to complete the level</li>
+                <li>Timer starts at 45 seconds and decreases by 1s each level</li>
+                <li>Reach Level 10 to become a Grok Master of Knowledge!</li>
             </ul>
         </div>
     </div>
@@ -93,7 +96,7 @@
         let timeLeft = 45;
         let speechEnabled = true;
         let availableQuestions = [];
-        let wrongAnswersThisLevel = [];   // New: Track wrong answers
+        let wrongAnswersThisLevel = [];
 
         const speech = window.speechSynthesis;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -135,7 +138,6 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        // Large pool of questions
         let baseQuestions = [
             {q:"How many continents are there?", a:"7"},
             {q:"Capital of France?", a:"Paris"},
@@ -180,17 +182,7 @@
             {q:"Who discovered gravity?", a:"Isaac Newton"},
             {q:"Smallest ocean?", a:"Arctic Ocean"},
             {q:"Capital of Argentina?", a:"Buenos Aires"},
-            {q:"What does UNESCO stand for?", a:"United Nations Educational, Scientific and Cultural Organization"},
-            {q:"How many sides does a triangle have?", a:"3"},
-            {q:"Capital of Russia?", a:"Moscow"},
-            {q:"Largest country by area?", a:"Russia"},
-            {q:"Currency of the UK?", a:"Pound"},
-            {q:"Who wrote Harry Potter?", a:"J.K. Rowling"},
-            {q:"Capital of China?", a:"Beijing"},
-            {q:"How many hearts does an octopus have?", a:"3"},
-            {q:"Fastest bird?", a:"Peregrine Falcon"},
-            {q:"Chemical symbol for water?", a:"H2O"},
-            {q:"How many bones in adult human body?", a:"206"}
+            {q:"What does UNESCO stand for?", a:"United Nations Educational, Scientific and Cultural Organization"}
         ];
 
         function shuffle(array) {
@@ -207,8 +199,8 @@
         function showUpdates() {
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
 • 150+ unique questions with anti-repetition<br>
-• At end of each level: shows all wrong answers with correct ones<br>
-• Guaranteed red tiles every level`);
+• Full How To Play instructions restored<br>
+• Close Game button fixed`);
         }
 
         function getRedBlocksForLevel() {
@@ -216,18 +208,16 @@
         }
 
         function awardPrize() {
-            // Show wrong answers from this level
             if (wrongAnswersThisLevel.length > 0) {
                 let msg = "❌ Questions you got wrong this level:\n\n";
                 wrongAnswersThisLevel.forEach(item => {
-                    msg += `Q: ${item.q}\nA: ${item.a}\n\n`;
+                    msg += `Q: ${item.q}\nCorrect Answer: ${item.a}\n\n`;
                 });
                 alert(msg);
             } else {
                 alert("Perfect level! No wrong answers.");
             }
-
-            wrongAnswersThisLevel = []; // Reset for next level
+            wrongAnswersThisLevel = [];
 
             const prizes = ["🌟 Grok Novice Explorer","🔥 Grok Knowledge Seeker","🧠 Grok Wisdom Guardian","⭐ Grok Master Navigator","🏆 Grok Elite Scholar","💎 Grok Legendary Mind","🌌 Grok Cosmic Thinker","⚡ Grok Ultimate Champion","👑 Grok Grand Sage","🏅 GROK MASTER OF KNOWLEDGE"];
             const prize = prizes[level-1] || "🏅 Grok Legend";
@@ -335,7 +325,7 @@
             if (!answer || answer.trim().length < 2) {
                 score = Math.max(0, score - 10);
                 alert("Wrong try again");
-                wrongAnswersThisLevel.push({q: q.q, a: q.a}); // Track wrong answer
+                wrongAnswersThisLevel.push({q: q.q, a: q.a});
                 setTimeout(triggerPuzzle, 600);
                 return;
             }
@@ -347,7 +337,7 @@
             } else {
                 score = Math.max(0, score - 10);
                 alert("Wrong try again");
-                wrongAnswersThisLevel.push({q: q.q, a: q.a}); // Track wrong answer
+                wrongAnswersThisLevel.push({q: q.q, a: q.a});
                 setTimeout(triggerPuzzle, 600);
             }
             document.getElementById('score').textContent = score;
@@ -389,10 +379,10 @@
             document.getElementById('gameContainer').classList.remove('hidden');
             gameStarted = true;
             availableQuestions = shuffle([...baseQuestions]);
-            wrongAnswersThisLevel = []; // Reset for new game
+            wrongAnswersThisLevel = [];
             generateMaze();
             draw();
-            addChat("Grok", "200+ unique questions loaded. Good luck!");
+            addChat("Grok", "Welcome! Use Arrow Keys or WASD to move.");
         }
 
         function closeGame() {
