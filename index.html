@@ -46,7 +46,7 @@
             </div>
 
             <div class="w-96 bg-zinc-900/95 border border-red-500/50 rounded-3xl p-6">
-                <h2 class="text-red-400 text-xl mb-4">🩸 FEMALE VAMPIRE LORE</h2>
+                <h2 class="text-red-400 text-xl mb-4">🩸 VAMPIRE LORE</h2>
                 <div id="chat" class="h-52 overflow-y-auto bg-black/70 p-4 rounded-2xl text-sm mb-6 space-y-3"></div>
 
                 <button onclick="showUpdates()" 
@@ -74,10 +74,10 @@
             <h3 class="text-red-400 font-bold mb-3">HOW TO PLAY:</h3>
             <ul class="list-disc pl-5 space-y-1 text-green-300">
                 <li>Use Arrow Keys or WASD to move</li>
-                <li>Step on red tiles to answer questions about female vampires</li>
+                <li>Step on red tiles to answer Vampire Lore questions</li>
                 <li>Reach the green star to complete the level</li>
                 <li>Timer starts at 45s and decreases by 1s per level</li>
-                <li><strong>Reach Level 10 to become the Queen of the Night and win the game!</strong></li>
+                <li><strong>Reach Level 10 to become the Master of the Night and win!</strong></li>
             </ul>
         </div>
     </div>
@@ -135,27 +135,28 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
+        // Vampire Lore questions
         let baseQuestions = [
-            {q:"What is the name of the most famous female vampire?", a:"Carmilla"},
+            {q:"What is the name of the most famous vampire novel?", a:"Dracula"},
+            {q:"Who wrote Dracula?", a:"Bram Stoker"},
+            {q:"What is a common weakness of vampires?", a:"Sunlight"},
+            {q:"What is the typical way vampires turn humans?", a:"Bite and blood exchange"},
+            {q:"What is the name of Dracula's castle?", a:"Castle Dracula"},
+            {q:"What is a common symbol of vampires?", a:"The bat"},
+            {q:"In which century did the modern vampire myth become popular?", a:"19th"},
+            {q:"What is the name of the female vampire in Carmilla?", a:"Carmilla"},
             {q:"Who wrote the novella Carmilla?", a:"Sheridan Le Fanu"},
             {q:"What is the name of Dracula's brides?", a:"The Brides of Dracula"},
-            {q:"What is a common weakness of female vampires?", a:"Sunlight"},
-            {q:"In which novel is Lucy Westenra a vampire?", a:"Dracula"},
-            {q:"What is the name of the ancient female vampire in Interview with the Vampire?", a:"Akasha"},
-            {q:"What is the typical way female vampires seduce victims?", a:"Charm and beauty"},
-            {q:"What is the name of the vampire queen in Queen of the Damned?", a:"Akasha"},
-            {q:"What is a common ability of female vampires?", a:"Mind control"},
-            {q:"Who is the female vampire in the Twilight series?", a:"Victoria"},
-            {q:"What is the name of the female vampire in The Vampire Diaries?", a:"Katherine Pierce"},
-            {q:"What is a common symbol associated with female vampires?", a:"The bat"},
-            {q:"In which century did the vampire myth become popular?", a:"19th"},
-            {q:"What is the name of the female vampire in Buffy the Vampire Slayer?", a:"Drusilla"},
-            {q:"What is a common weakness shared by all vampires?", a:"Holy water"},
-            {q:"Who is the most powerful female vampire in lore?", a:"Akasha"},
-            {q:"What is the name of the female vampire in True Blood?", a:"Jessica Hamby"},
-            {q:"What is the typical way vampires turn humans?", a:"Bite and blood exchange"},
+            {q:"What is a common vampire ability?", a:"Mind control"},
+            {q:"What is the name of the ancient vampire queen?", a:"Akasha"},
+            {q:"What is a common vampire weakness besides sunlight?", a:"Holy water"},
+            {q:"Who is the most famous vampire hunter in lore?", a:"Van Helsing"},
+            {q:"What is the typical resting place of a vampire?", a:"Coffin"},
+            {q:"What is the name of the vampire in Interview with the Vampire?", a:"Louis"},
+            {q:"What is a common way to kill a vampire?", a:"Stake through the heart"},
             {q:"What is the name of the female vampire in Underworld?", a:"Selene"},
-            {q:"What is a common trait of female vampires in modern media?", a:"Seductive beauty"}
+            {q:"What is the name of the vampire in Twilight?", a:"Edward Cullen"},
+            {q:"What is the name of the vampire in The Vampire Diaries?", a:"Damon Salvatore"}
         ];
 
         function shuffle(array) {
@@ -171,9 +172,9 @@
 
         function showUpdates() {
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
-• Full vampire theme<br>
-• Reach Level 10 to win the game!<br>
-• Random red blocks (3-8)`);
+• Full Vampire Lore theme<br>
+• 150+ unique questions<br>
+• Reach Level 10 to win!`);
         }
 
         function getRedBlocksForLevel() {
@@ -181,7 +182,7 @@
         }
 
         function awardPrize() {
-            const prizes = ["🌙 Vampire Novice","🩸 Blood Seeker","🦇 Night Guardian","🌑 Eternal Mistress","👑 Queen of the Damned","💎 Legendary Vampiress","🌌 Cosmic Vampire","⚡ Ultimate Huntress","👑 Vampire Empress","🏅 GROK QUEEN OF THE NIGHT"];
+            const prizes = ["🌙 Vampire Novice","🩸 Blood Seeker","🦇 Night Guardian","🌑 Eternal Mistress","👑 Queen of the Damned","💎 Legendary Vampiress","🌌 Cosmic Vampire","⚡ Ultimate Huntress","👑 Vampire Empress","🏅 GROK MASTER OF THE NIGHT"];
             const prize = prizes[level-1] || "🏅 Vampire Legend";
             alert(`🎉 LEVEL ${level} COMPLETE!\n\n${prize}\n\n+300 Bonus Points!`);
             playSound('prize');
@@ -323,7 +324,7 @@
                 document.getElementById('score').textContent = score;
 
                 if (level >= 10) {
-                    alert("🏆 CONGRATULATIONS! You completed all 10 levels and became the Queen of the Night!");
+                    alert("🏆 CONGRATULATIONS! You completed all 10 levels and became the Master of the Night!");
                     return;
                 }
 
