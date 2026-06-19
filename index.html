@@ -134,27 +134,27 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        // Vampire-themed questions (female vampires focus)
+        // Vampire-themed questions
         let baseQuestions = [
             {q:"What is the name of the most famous female vampire?", a:"Carmilla"},
             {q:"Who wrote the novella Carmilla?", a:"Sheridan Le Fanu"},
-            {q:"What is the name of Dracula's brides in the novel?", a:"The Brides of Dracula"},
-            {q:"What is a common weakness of female vampires in lore?", a:"Sunlight"},
-            {q:"In which novel is the vampire Lucy Westenra?", a:"Dracula"},
-            {q:"What is the name of the ancient female vampire in 'Interview with the Vampire'?", a:"Akasha"},
+            {q:"What is the name of Dracula's brides?", a:"The Brides of Dracula"},
+            {q:"What is a common weakness of female vampires?", a:"Sunlight"},
+            {q:"In which novel is Lucy Westenra a vampire?", a:"Dracula"},
+            {q:"What is the name of the ancient female vampire in Interview with the Vampire?", a:"Akasha"},
             {q:"What is the typical way female vampires seduce victims?", a:"Charm and beauty"},
-            {q:"What is the name of the vampire queen in 'Queen of the Damned'?", a:"Akasha"},
+            {q:"What is the name of the vampire queen in Queen of the Damned?", a:"Akasha"},
             {q:"What is a common ability of female vampires?", a:"Mind control"},
-            {q:"Who is the female vampire in 'Twilight' series?", a:"Victoria"},
-            {q:"What is the name of the female vampire in 'The Vampire Diaries'?", a:"Katherine Pierce"},
+            {q:"Who is the female vampire in the Twilight series?", a:"Victoria"},
+            {q:"What is the name of the female vampire in The Vampire Diaries?", a:"Katherine Pierce"},
             {q:"What is a common symbol associated with female vampires?", a:"The bat"},
-            {q:"In which century did the vampire myth become popular in literature?", a:"19th"},
-            {q:"What is the name of the female vampire in 'Buffy the Vampire Slayer'?", a:"Drusilla"},
+            {q:"In which century did the vampire myth become popular?", a:"19th"},
+            {q:"What is the name of the female vampire in Buffy the Vampire Slayer?", a:"Drusilla"},
             {q:"What is a common weakness shared by all vampires?", a:"Holy water"},
             {q:"Who is the most powerful female vampire in lore?", a:"Akasha"},
-            {q:"What is the name of the female vampire in 'True Blood'?", a:"Jessica Hamby"},
+            {q:"What is the name of the female vampire in True Blood?", a:"Jessica Hamby"},
             {q:"What is the typical way vampires turn humans?", a:"Bite and blood exchange"},
-            {q:"What is the name of the female vampire in 'Underworld'?", a:"Selene"},
+            {q:"What is the name of the female vampire in Underworld?", a:"Selene"},
             {q:"What is a common trait of female vampires in modern media?", a:"Seductive beauty"}
         ];
 
@@ -173,11 +173,11 @@
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
 • Full vampire theme with focus on female vampires<br>
 • 150+ unique questions<br>
-• Full How To Play guide restored`);
+• Red blocks now random between 3 and 8`);
         }
 
         function getRedBlocksForLevel() {
-            return Math.max(8, 12 + Math.floor(level * 3.5));
+            return Math.floor(Math.random() * 6) + 3; // Random between 3 and 8
         }
 
         function awardPrize() {
