@@ -77,6 +77,7 @@
                 <li>Step on red tiles to answer questions about female vampires</li>
                 <li>Reach the green star to complete the level</li>
                 <li>Timer starts at 45s and decreases by 1s per level</li>
+                <li>Reach Level 10 to become the Queen of the Night!</li>
             </ul>
         </div>
     </div>
@@ -134,7 +135,6 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        // Vampire-themed questions
         let baseQuestions = [
             {q:"What is the name of the most famous female vampire?", a:"Carmilla"},
             {q:"Who wrote the novella Carmilla?", a:"Sheridan Le Fanu"},
@@ -173,11 +173,11 @@
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
 • Full vampire theme with focus on female vampires<br>
 • 150+ unique questions<br>
-• Red blocks now random between 3 and 8`);
+• Red blocks random between 3 and 8`);
         }
 
         function getRedBlocksForLevel() {
-            return Math.floor(Math.random() * 6) + 3; // Random between 3 and 8
+            return Math.floor(Math.random() * 6) + 3; // 3 to 8
         }
 
         function awardPrize() {
@@ -323,7 +323,7 @@
                 document.getElementById('score').textContent = score;
 
                 if (level >= 10) {
-                    alert("🏆 CONGRATULATIONS! You completed all 10 levels of the Vampire Labyrinth!");
+                    alert("🏆 CONGRATULATIONS! You completed all 10 levels and became the Queen of the Night!");
                     return;
                 }
 
