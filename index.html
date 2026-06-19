@@ -171,10 +171,9 @@
 
         function showUpdates() {
             addChat("Grok", `📜 <strong>Latest Updates</strong><br>
-• Full vampire theme with focus on female vampires<br>
-• 150+ unique questions<br>
-• Red blocks random between 3 and 8<br>
-• Reach Level 10 to win!`);
+• Full vampire theme<br>
+• Reach Level 10 to win the game!<br>
+• Random red blocks (3-8)`);
         }
 
         function getRedBlocksForLevel() {
@@ -342,7 +341,7 @@
             availableQuestions = shuffle([...baseQuestions]);
             generateMaze();
             draw();
-            addChat("Grok", "Welcome to the Vampire Labyrinth! Use Arrow Keys or WASD.");
+            addChat("Grok", "Welcome to the Vampire Labyrinth! Reach Level 10 to win!");
         }
 
         function closeGame() {
@@ -360,7 +359,7 @@
         }
 
         function giveHint() {
-            addChat("Grok", "Red tiles trigger vampire lore questions. Reach the green star to win Level 10!");
+            addChat("Grok", "Red tiles trigger vampire lore questions. Reach Level 10 to win!");
         }
 
         function shuffle(array) {
